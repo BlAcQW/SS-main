@@ -303,6 +303,10 @@ import dbConnect from "@/lib/mongodb";
 import Order from "@/models/Order";
 import Product from "@/models/Product";
 import { formatCurrency } from "@/lib/utils";
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+
 
 async function getDashboardData() {
   await dbConnect();
@@ -407,6 +411,8 @@ function getPaymentBadge(paymentStatus: string) {
 }
 
 export default async function AdminDashboard() {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect('/auth/login');
   const { 
     totalRevenue, 
     orderCount, 
