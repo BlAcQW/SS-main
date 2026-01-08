@@ -1,5 +1,3 @@
-'use client';
-
 interface ImageLoaderProps {
   src: string;
   width: number;
