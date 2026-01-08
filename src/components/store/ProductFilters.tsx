@@ -190,14 +190,14 @@ export const ProductFilters = ({ categories, maxPrice }: ProductFiltersProps) =>
 
   return (
     <div className="space-y-4">
-      {/* Search Bar and Filter Toggle */}
-      <div className="flex flex-col md:flex-row gap-4 items-center">
-        <div className="relative flex-1 w-full">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+      {/* Search Bar and Filter Toggle - Side by side on all screen sizes */}
+      <div className="flex flex-row gap-2 sm:gap-4 items-center">
+        <div className="relative flex-1 min-w-0">
+          <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
           <Input
             type="search"
-            placeholder="Search for gadgets..."
-            className="w-full pl-12 pr-4 py-3 rounded-full border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:border-indigo-500 focus:outline-none transition-colors text-base"
+            placeholder="Search..."
+            className="w-full pl-9 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-full border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:border-indigo-500 focus:outline-none transition-colors text-sm sm:text-base placeholder:text-slate-400"
             defaultValue={currentSearch}
             onChange={handleSearchChange}
           />
@@ -205,17 +205,17 @@ export const ProductFilters = ({ categories, maxPrice }: ProductFiltersProps) =>
         
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className="flex items-center gap-2 px-6 py-3 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors font-medium whitespace-nowrap"
+          className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-2.5 sm:py-3 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors font-medium whitespace-nowrap flex-shrink-0"
         >
           {showFilters ? (
             <>
-              <X className="w-5 h-5" />
-              <span>Close</span>
+              <X className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="text-sm sm:text-base">Close</span>
             </>
           ) : (
             <>
-              <SlidersHorizontal className="w-5 h-5" />
-              <span>Filters</span>
+              <SlidersHorizontal className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="text-sm sm:text-base">Filters</span>
             </>
           )}
         </button>

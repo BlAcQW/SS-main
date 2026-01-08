@@ -106,7 +106,7 @@ export const ProductCard = ({ product, priority = false }: ProductCardProps) => 
             
             {/* Product Tags */}
             {product.tags && product.tags.length > 0 && (
-              <div className="absolute top-2 left-2 flex flex-col gap-1">
+              <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 flex flex-col gap-1">
                 {product.tags.slice(0, 2).map((tag) => {
                   const config = TAG_CONFIG[tag as ProductTag];
                   if (!config) return null;
@@ -114,10 +114,10 @@ export const ProductCard = ({ product, priority = false }: ProductCardProps) => 
                   return (
                     <span
                       key={tag}
-                      className={`${config.bgColor} ${config.textColor} text-[9px] sm:text-xs font-semibold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full flex items-center gap-1 shadow-lg`}
+                      className={`${config.bgColor} ${config.textColor} text-[7px] sm:text-xs font-semibold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full flex items-center gap-0.5 sm:gap-1 shadow-lg`}
                     >
-                      <IconComponent className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-                      <span className="hidden sm:inline">{tag}</span>
+                      <IconComponent className="h-2.5 w-2.5 sm:h-3 sm:w-3 flex-shrink-0" />
+                      <span className="truncate max-w-[50px] sm:max-w-none">{tag}</span>
                     </span>
                   );
                 })}
