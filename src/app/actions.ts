@@ -81,6 +81,8 @@ export async function deleteCategory(id: string) {
 
 
 // Product Actions
+const VALID_TAGS = ['Hot Selling', 'Flash Sale', 'New Products', 'Best Seller', 'Limited Edition'] as const;
+
 const productSchema = z.object({
   name: z.string().min(2),
   description: z.string().min(10),
@@ -88,6 +90,7 @@ const productSchema = z.object({
   stock: z.coerce.number().min(0),
   category: z.string().min(1),
   imageUrls: z.array(z.string().url()).min(1),
+  tags: z.array(z.enum(VALID_TAGS)).optional().default([]),
 });
 
 export async function createProduct(values: unknown): Promise<IProduct> {
@@ -100,11 +103,13 @@ export async function createProduct(values: unknown): Promise<IProduct> {
   await dbConnect();
   const newProduct = new Product({
     ...validatedFields.data,
-    category: new Types.ObjectId(validatedFields.data.category)
+    category: new Types.ObjectId(validatedFields.data.category),
+    tags: validatedFields.data.tags || [],
   });
   await newProduct.save();
   const populatedProduct = await Product.findById(newProduct._id).populate('category');
   revalidatePath('/admin/products');
+  revalidatePath('/');
   return JSON.parse(JSON.stringify(populatedProduct));
 }
 
@@ -116,10 +121,12 @@ export async function updateProduct(id: string, values: unknown): Promise<IProdu
   await dbConnect();
   const updatedProduct = await Product.findByIdAndUpdate(id, {
     ...validatedFields.data,
-    category: new Types.ObjectId(validatedFields.data.category)
+    category: new Types.ObjectId(validatedFields.data.category),
+    tags: validatedFields.data.tags || [],
   }, { new: true }).populate('category');
   if (!updatedProduct) throw new Error("Product not found");
   revalidatePath('/admin/products');
+  revalidatePath('/');
   return JSON.parse(JSON.stringify(updatedProduct));
 }
 

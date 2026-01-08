@@ -119,13 +119,22 @@
 
 import { useCallback, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { ICategory } from '@/types';
+import { ICategory, PRODUCT_TAGS, ProductTag } from '@/types';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { Search, SlidersHorizontal, X, Flame, Zap, Sparkles, Star, Crown, Tag } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import { useDebouncedCallback } from 'use-debounce';
+
+// Tag configuration for filter display
+const TAG_FILTER_CONFIG: Record<ProductTag, { icon: typeof Flame; color: string; bgColor: string; activeColor: string }> = {
+  'Hot Selling': { icon: Flame, color: 'text-orange-600', bgColor: 'bg-orange-50 border-orange-200', activeColor: 'bg-orange-500 text-white border-orange-500' },
+  'Flash Sale': { icon: Zap, color: 'text-yellow-600', bgColor: 'bg-yellow-50 border-yellow-200', activeColor: 'bg-yellow-500 text-white border-yellow-500' },
+  'New Products': { icon: Sparkles, color: 'text-blue-600', bgColor: 'bg-blue-50 border-blue-200', activeColor: 'bg-blue-500 text-white border-blue-500' },
+  'Best Seller': { icon: Star, color: 'text-green-600', bgColor: 'bg-green-50 border-green-200', activeColor: 'bg-green-500 text-white border-green-500' },
+  'Limited Edition': { icon: Crown, color: 'text-purple-600', bgColor: 'bg-purple-50 border-purple-200', activeColor: 'bg-purple-500 text-white border-purple-500' },
+};
 
 interface ProductFiltersProps {
   categories: ICategory[];
@@ -141,6 +150,7 @@ export const ProductFilters = ({ categories, maxPrice }: ProductFiltersProps) =>
   const currentSearch = searchParams.get('search') || '';
   const currentMinPrice = Number(searchParams.get('minPrice')) || 0;
   const currentMaxPrice = Number(searchParams.get('maxPrice')) || maxPrice;
+  const currentTag = searchParams.get('tag') || '';
   
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -158,6 +168,11 @@ export const ProductFilters = ({ categories, maxPrice }: ProductFiltersProps) =>
 
   const handleCategoryChange = (value: string) => {
     const newPath = createQueryString('category', value === 'all' ? '' : value);
+    router.push(`?${newPath}`, { scroll: false });
+  };
+
+  const handleTagChange = (tag: string) => {
+    const newPath = createQueryString('tag', currentTag === tag ? '' : tag);
     router.push(`?${newPath}`, { scroll: false });
   };
   
@@ -236,6 +251,44 @@ export const ProductFilters = ({ categories, maxPrice }: ProductFiltersProps) =>
                   {category.name}
                 </button>
               ))}
+            </div>
+          </div>
+
+          {/* Tag Filters */}
+          <div>
+            <Label className="text-sm font-semibold mb-3 flex items-center gap-2">
+              <Tag className="h-4 w-4" />
+              Filter by Tags
+            </Label>
+            <div className="flex flex-wrap gap-2 md:gap-3">
+              {PRODUCT_TAGS.map((tag) => {
+                const config = TAG_FILTER_CONFIG[tag];
+                const IconComponent = config.icon;
+                const isActive = currentTag === tag;
+                return (
+                  <button
+                    key={tag}
+                    onClick={() => handleTagChange(tag)}
+                    className={`px-4 py-2 rounded-full font-medium transition-all text-sm flex items-center gap-2 border ${
+                      isActive
+                        ? config.activeColor + ' shadow-lg scale-105'
+                        : config.bgColor + ' ' + config.color + ' hover:opacity-80'
+                    }`}
+                  >
+                    <IconComponent className="h-4 w-4" />
+                    {tag}
+                  </button>
+                );
+              })}
+              {currentTag && (
+                <button
+                  onClick={() => handleTagChange('')}
+                  className="px-4 py-2 rounded-full font-medium transition-all text-sm flex items-center gap-2 bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-500"
+                >
+                  <X className="h-4 w-4" />
+                  Clear Tag
+                </button>
+              )}
             </div>
           </div>
 

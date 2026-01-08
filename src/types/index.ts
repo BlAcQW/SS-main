@@ -1,6 +1,10 @@
 
 import type { Types } from 'mongoose';
 
+// Product tag types
+export const PRODUCT_TAGS = ['Hot Selling', 'Flash Sale', 'New Products', 'Best Seller', 'Limited Edition'] as const;
+export type ProductTag = typeof PRODUCT_TAGS[number];
+
 export interface ICategory {
   _id: string;
   name: string;
@@ -17,6 +21,7 @@ export interface IProduct {
   stock: number;
   imageUrls: string[];
   category: ICategory | Types.ObjectId | string;
+  tags?: ProductTag[];
   createdAt?: Date;
   updatedAt?: Date;
 }

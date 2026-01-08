@@ -1,6 +1,10 @@
 import { Schema, model, models, Model, Types } from 'mongoose';
 import type { IProduct } from '@/types';
 
+// Define available product tags
+export const PRODUCT_TAGS = ['Hot Selling', 'Flash Sale', 'New Products', 'Best Seller', 'Limited Edition'] as const;
+export type ProductTag = typeof PRODUCT_TAGS[number];
+
 const ProductSchema = new Schema<IProduct>({
   name: {
     type: String,
@@ -31,6 +35,14 @@ const ProductSchema = new Schema<IProduct>({
     type: Types.ObjectId,
     ref: 'Category',
     required: true,
+  },
+  tags: {
+    type: [String],
+    default: [],
+    validate: {
+      validator: (v: string[]) => v.every(tag => PRODUCT_TAGS.includes(tag as ProductTag)),
+      message: 'Invalid tag value.',
+    },
   },
 }, { timestamps: true });
 

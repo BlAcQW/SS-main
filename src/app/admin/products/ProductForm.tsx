@@ -6,19 +6,29 @@ import Image from 'next/image';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { ICategory, IProduct } from '@/types';
+import { ICategory, IProduct, PRODUCT_TAGS, ProductTag } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
-  Form, FormControl, FormField, FormItem, FormLabel, FormMessage
+  Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription
 } from '@/components/ui/form';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Upload, Trash2 } from 'lucide-react';
+import { Loader2, Upload, Trash2, Tag, Flame, Zap, Sparkles, Star, Crown } from 'lucide-react';
 import { createProduct, updateProduct } from '@/app/actions';
+
+// Tag configuration with icons and colors
+const TAG_CONFIG: Record<ProductTag, { icon: typeof Flame; color: string; bgColor: string }> = {
+  'Hot Selling': { icon: Flame, color: 'text-orange-600', bgColor: 'bg-orange-100' },
+  'Flash Sale': { icon: Zap, color: 'text-yellow-600', bgColor: 'bg-yellow-100' },
+  'New Products': { icon: Sparkles, color: 'text-blue-600', bgColor: 'bg-blue-100' },
+  'Best Seller': { icon: Star, color: 'text-green-600', bgColor: 'bg-green-100' },
+  'Limited Edition': { icon: Crown, color: 'text-purple-600', bgColor: 'bg-purple-100' },
+};
 
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -27,6 +37,7 @@ const formSchema = z.object({
   stock: z.coerce.number().min(0, 'Stock cannot be negative.'),
   category: z.string().min(1, 'Category is required.'),
   imageUrls: z.array(z.string().url()).min(1, 'At least one image is required.'),
+  tags: z.array(z.enum(PRODUCT_TAGS)).optional().default([]),
 });
 
 interface ProductFormProps {
@@ -52,6 +63,7 @@ export default function ProductForm({ onSuccess, product, categories }: ProductF
           ? String((product?.category as any)?._id ?? '')
           : String(product?.category ?? ''),
       imageUrls: product?.imageUrls || [],
+      tags: (product?.tags as ProductTag[]) || [],
     },
   });
 
@@ -269,6 +281,68 @@ export default function ProductForm({ onSuccess, product, categories }: ProductF
             )}
           />
         </div>
+
+        {/* Product Tags */}
+        <FormField
+          control={form.control}
+          name="tags"
+          render={() => (
+            <FormItem>
+              <div className="mb-4">
+                <FormLabel className="flex items-center gap-2">
+                  <Tag className="h-4 w-4" />
+                  Product Tags
+                </FormLabel>
+                <FormDescription>
+                  Select tags to highlight this product for customers
+                </FormDescription>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                {PRODUCT_TAGS.map((tag) => {
+                  const config = TAG_CONFIG[tag];
+                  const IconComponent = config.icon;
+                  return (
+                    <FormField
+                      key={tag}
+                      control={form.control}
+                      name="tags"
+                      render={({ field }) => {
+                        return (
+                          <FormItem
+                            key={tag}
+                            className="flex flex-row items-center space-x-3 space-y-0"
+                          >
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(tag)}
+                                onCheckedChange={(checked) => {
+                                  return checked
+                                    ? field.onChange([...field.value, tag])
+                                    : field.onChange(
+                                        field.value?.filter(
+                                          (value: string) => value !== tag
+                                        )
+                                      );
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="flex items-center gap-2 font-normal cursor-pointer">
+                              <span className={`p-1 rounded ${config.bgColor}`}>
+                                <IconComponent className={`h-3 w-3 ${config.color}`} />
+                              </span>
+                              <span className="text-sm">{tag}</span>
+                            </FormLabel>
+                          </FormItem>
+                        );
+                      }}
+                    />
+                  );
+                })}
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <Button type="submit" disabled={isLoading || isUploading}>
           {(isLoading || isUploading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

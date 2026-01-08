@@ -32,9 +32,10 @@ export default async function Home({
     search?: string;
     minPrice?: string;
     maxPrice?: string;
+    tag?: string;
   };
 }) {
-  const { category, search, minPrice, maxPrice } = searchParams;
+  const { category, search, minPrice, maxPrice, tag } = searchParams;
   
   const [categories, allProducts] = await Promise.all([
     getCategories(),
@@ -51,8 +52,11 @@ export default async function Home({
     const price = Number(product.price);
     const minPriceMatch = !minPrice || price >= Number(minPrice);
     const maxPriceMatch = !maxPrice || price <= Number(maxPrice);
+    
+    // Tag filter
+    const tagMatch = !tag || (product.tags && product.tags.includes(tag as any));
 
-    return categoryMatch && searchMatch && minPriceMatch && maxPriceMatch;
+    return categoryMatch && searchMatch && minPriceMatch && maxPriceMatch && tagMatch;
   });
 
   const trendingProducts = filteredProducts.slice(0, 2);
