@@ -10,13 +10,12 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    // Use Cloudinary loader for automatic optimizations
-    loader: 'custom',
-    loaderFile: './src/lib/imageLoader.ts',
+    // Use unoptimized for external images (Cloudinary handles optimization)
+    unoptimized: true,
     // Define device sizes for responsive images
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    // Allow these remote patterns as fallback
+    // Allow these remote patterns
     remotePatterns: [
       {
         protocol: 'https',
@@ -31,8 +30,6 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       }
     ],
-    // Minimize image loading time
-    minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
     // Supported formats
     formats: ['image/avif', 'image/webp'],
   },

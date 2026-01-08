@@ -25,15 +25,16 @@ async function getProducts(): Promise<IProduct[]> {
 export default async function Home({
   searchParams,
 }: {
-  searchParams: { 
+  searchParams: Promise<{ 
     category?: string; 
     search?: string;
     minPrice?: string;
     maxPrice?: string;
     tag?: string;
-  };
+  }>;
 }) {
-  const { category, search, minPrice, maxPrice, tag } = searchParams;
+  // In Next.js 15, searchParams is a Promise and must be awaited
+  const { category, search, minPrice, maxPrice, tag } = await searchParams;
   
   const [categories, allProducts] = await Promise.all([
     getCategories(),

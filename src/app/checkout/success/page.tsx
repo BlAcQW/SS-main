@@ -137,9 +137,10 @@ import { getOrder } from '@/app/actions';
 export default async function CheckoutSuccessPage({
   searchParams,
 }: {
-  searchParams: { orderId?: string };
+  searchParams: Promise<{ orderId?: string }>;
 }) {
-  const { orderId } = searchParams;
+  // In Next.js 15, searchParams is a Promise and must be awaited
+  const { orderId } = await searchParams;
 
   if (!orderId) {
     notFound();

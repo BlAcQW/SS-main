@@ -21,8 +21,10 @@ async function getProduct(id: string): Promise<IProduct | null> {
 }
 
 
-export default async function ProductDetailPage({ params }: { params: { id: string } }) {
-  const product = await getProduct(params.id);
+export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  // In Next.js 15, params is a Promise and must be awaited
+  const { id } = await params;
+  const product = await getProduct(id);
   
   if (!product) {
     notFound();
