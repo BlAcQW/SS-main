@@ -213,7 +213,11 @@ export default async function CheckoutSuccessPage({
                         src={item.product.imageUrls[0]}
                         alt={item.product.name}
                         fill
+                        sizes="64px"
                         className="object-cover"
+                        loading="lazy"
+                        placeholder="blur"
+                        blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjFmNWY5Ii8+PC9zdmc+"
                         data-ai-hint="product image"
                       />
                     </div>

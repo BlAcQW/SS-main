@@ -68,9 +68,10 @@ import { ShoppingCart } from 'lucide-react';
 
 interface ProductCardProps {
   product: IProduct;
+  priority?: boolean; // For above-the-fold images
 }
 
-export const ProductCard = ({ product }: ProductCardProps) => {
+export const ProductCard = ({ product, priority = false }: ProductCardProps) => {
   const { addItem } = useCart();
 
   return (
@@ -83,8 +84,13 @@ export const ProductCard = ({ product }: ProductCardProps) => {
               alt={product.name}
               width={400}
               height={400}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
               data-ai-hint="product image"
+              loading={priority ? 'eager' : 'lazy'}
+              priority={priority}
+              placeholder="blur"
+              blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjFmNWY5Ii8+PC9zdmc+"
             />
             {/* Gradient Overlay on Hover */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

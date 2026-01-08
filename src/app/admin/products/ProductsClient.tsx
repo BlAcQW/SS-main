@@ -1058,6 +1058,9 @@ export default function ProductsClient({ initialProducts, categories }: { initia
                       width={48}
                       height={48}
                       className="rounded-lg object-cover border-2 border-gray-100"
+                      loading="lazy"
+                      placeholder="blur"
+                      blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjFmNWY5Ii8+PC9zdmc+"
                     />
                     {product.stock === 0 && (
                       <div className="absolute inset-0 bg-gray-900/20 rounded-lg flex items-center justify-center">
@@ -1172,6 +1175,9 @@ export default function ProductsClient({ initialProducts, categories }: { initia
                             width={48}
                             height={48}
                             className="rounded-lg object-cover border-2 border-gray-100 group-hover:border-blue-200 transition-colors"
+                            loading="lazy"
+                            placeholder="blur"
+                            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjFmNWY5Ii8+PC9zdmc+"
                           />
                           {product.stock === 0 && (
                             <div className="absolute inset-0 bg-gray-900/20 rounded-lg flex items-center justify-center">

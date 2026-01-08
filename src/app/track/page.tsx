@@ -154,6 +154,9 @@ export default function TrackOrderPage() {
                          width={64}
                          height={64}
                          className="rounded-md object-cover"
+                         loading="lazy"
+                         placeholder="blur"
+                         blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjFmNWY5Ii8+PC9zdmc+"
                          data-ai-hint="product image"
                        />
                      )}

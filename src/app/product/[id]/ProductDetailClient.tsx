@@ -26,6 +26,9 @@ export function ProductDetailClient({ product }: { product: IProduct }) {
               data-ai-hint="product image"
               key={primaryImage}
               sizes="(max-width: 768px) 100vw, 50vw"
+              priority // Main product image should load immediately
+              placeholder="blur"
+              blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjFmNWY5Ii8+PC9zdmc+"
             />
           </div>
           {product.imageUrls && product.imageUrls.length > 1 && (
@@ -45,7 +48,10 @@ export function ProductDetailClient({ product }: { product: IProduct }) {
                     fill
                     className="object-cover"
                     data-ai-hint="product thumbnail"
-                    sizes="20vw"
+                    sizes="10vw"
+                    loading="lazy"
+                    placeholder="blur"
+                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjFmNWY5Ii8+PC9zdmc+"
                   />
                 </div>
               ))}

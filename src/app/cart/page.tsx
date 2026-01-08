@@ -216,8 +216,12 @@ export default function CartPage() {
                       src={item.imageUrls[0]}
                       alt={item.name}
                       fill
+                      sizes="128px"
                       className="object-cover"
                       data-ai-hint="product image"
+                      loading="lazy"
+                      placeholder="blur"
+                      blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjFmNWY5Ii8+PC9zdmc+"
                     />
                   </div>
                   
