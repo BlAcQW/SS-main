@@ -38,7 +38,7 @@ export function ProductDetailClient({ product }: { product: IProduct }) {
                   key={index}
                   className={cn(
                     "relative aspect-square w-full overflow-hidden rounded-md cursor-pointer border-2 transition-all",
-                    url === primaryImage ? 'border-primary' : 'border-transparent hover:border-primary/50'
+                    url === primaryImage ? 'border-indigo-500 ring-2 ring-indigo-500/30' : 'border-transparent hover:border-indigo-400'
                   )}
                   onClick={() => setPrimaryImage(url)}
                 >
@@ -61,11 +61,11 @@ export function ProductDetailClient({ product }: { product: IProduct }) {
 
         <div className="flex flex-col h-full">
           <div>
-            <p className="text-sm text-muted-foreground mb-2">
+            <p className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider mb-2">
               {typeof product.category === 'object' && product.category?.name || 'Uncategorized'}
             </p>
-            <h1 className="text-3xl md:text-4xl font-headline font-bold mb-4">{product.name}</h1>
-            <p className="text-3xl font-semibold text-purple-600 mb-6">
+            <h1 className="text-3xl md:text-4xl font-headline font-bold mb-4 text-slate-800 dark:text-white">{product.name}</h1>
+            <p className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6">
               {formatCurrency(product.price)}
             </p>
             <p className="text-base text-foreground/80 leading-relaxed mb-6">
@@ -74,7 +74,12 @@ export function ProductDetailClient({ product }: { product: IProduct }) {
           </div>
           <div className="mt-auto">
              <div className="flex items-center gap-4 mb-6">
-              <span className={`text-sm font-medium ${product.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
+              <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium ${
+                product.stock > 0 
+                  ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' 
+                  : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+              }`}>
+                <span className={`w-2 h-2 rounded-full ${product.stock > 0 ? 'bg-green-500' : 'bg-red-500'}`} />
                 {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
               </span>
             </div>

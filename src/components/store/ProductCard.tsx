@@ -57,6 +57,7 @@
 
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { IProduct, ProductTag } from '@/types';
@@ -64,7 +65,7 @@ import { formatCurrency } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useCart } from '@/hooks/useCart';
-import { ShoppingCart, Flame, Zap, Sparkles, Star, Crown } from 'lucide-react';
+import { ShoppingCart, Flame, Zap, Sparkles, Star, Crown, Check } from 'lucide-react';
 
 // Tag configuration for display
 const TAG_CONFIG: Record<ProductTag, { icon: typeof Flame; color: string; bgColor: string; textColor: string }> = {
@@ -82,6 +83,22 @@ interface ProductCardProps {
 
 export const ProductCard = ({ product, priority = false }: ProductCardProps) => {
   const { addItem } = useCart();
+  const [isAdding, setIsAdding] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    setIsAdding(true);
+    addItem(product);
+    
+    setTimeout(() => {
+      setIsAdding(false);
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 1200);
+    }, 150);
+  };
 
   return (
     <Card className="group flex h-full flex-col overflow-hidden rounded-xl sm:rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 sm:hover:-translate-y-2 border-0 bg-white dark:bg-slate-800">
@@ -141,12 +158,29 @@ export const ProductCard = ({ product, priority = false }: ProductCardProps) => 
           {formatCurrency(product.price)}
         </p>
         <Button 
-          onClick={() => addItem(product)} 
+          onClick={handleAddToCart}
           size="sm"
-          className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-full px-2 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm transition-all hover:scale-105 shadow-md"
+          className={`
+            rounded-full px-2 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm 
+            transition-all duration-200 shadow-md
+            ${showSuccess 
+              ? 'bg-green-500 hover:bg-green-600 animate-cart-add' 
+              : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700'
+            }
+            ${isAdding ? 'scale-95' : 'hover:scale-105'}
+            hover:shadow-lg hover:shadow-indigo-500/20
+            active:scale-95
+          `}
+          disabled={isAdding}
         >
-          <ShoppingCart className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
-          <span className="hidden sm:inline">Add</span>
+          {showSuccess ? (
+            <Check className="h-3 w-3 sm:h-4 sm:w-4" />
+          ) : (
+            <>
+              <ShoppingCart className={`h-3 w-3 sm:h-4 sm:w-4 sm:mr-2 ${isAdding ? 'animate-icon-bounce' : ''}`} />
+              <span className="hidden sm:inline">Add</span>
+            </>
+          )}
         </Button>
       </CardFooter>
     </Card>
