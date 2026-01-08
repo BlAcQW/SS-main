@@ -6,8 +6,7 @@ import dbConnect from '@/lib/mongodb';
 import Category from '@/models/Category';
 import Product from '@/models/Product';
 import { ProductFilters } from '@/components/store/ProductFilters';
-import { HeroCarousel } from '@/components/store/HeroCarousel';
-import { Sparkles, ArrowRight, Zap, Shield, Truck } from 'lucide-react';
+import { Sparkles, ArrowRight, Shield, Truck } from 'lucide-react';
 import Link from 'next/link';
 import CTASection from '@/components/footer2';
 
@@ -42,16 +41,6 @@ export default async function Home({
   ]);
   
   const maxProductPrice = Math.max(...allProducts.map(p => p.price), 0);
-
-  // Get Hot Selling products for the hero carousel
-  const hotSellingProducts = allProducts.filter(
-    product => product.tags?.includes('Hot Selling')
-  ).slice(0, 5);
-
-  // Fallback to first 5 products if no Hot Selling products
-  const carouselProducts = hotSellingProducts.length > 0 
-    ? hotSellingProducts 
-    : allProducts.slice(0, 5);
 
   const filteredProducts = allProducts.filter(product => {
     const categoryId = product.category?._id.toString();
@@ -121,17 +110,6 @@ export default async function Home({
               </Link>
             </div>
           </div>
-          
-          {/* Hot Selling Products Carousel */}
-          {carouselProducts.length > 0 && (
-            <div className="mt-6 sm:mt-8 md:mt-10">
-              <div className="flex items-center justify-center gap-2 mb-4 sm:mb-6">
-                <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" />
-                <h2 className="text-base sm:text-lg md:text-xl font-semibold text-white">Hot Selling Products</h2>
-              </div>
-              <HeroCarousel products={carouselProducts} />
-            </div>
-          )}
           
           {/* Trust Badges */}
           <div className="flex flex-wrap justify-center gap-4 sm:gap-8 mt-8 sm:mt-10 md:mt-12 pt-6 sm:pt-8 border-t border-white/10">
