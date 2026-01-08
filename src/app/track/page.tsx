@@ -61,7 +61,7 @@ export default function TrackOrderPage() {
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <Card className="max-w-2xl mx-auto">
         <CardHeader>
-          <CardTitle className="text-center text-2xl md:text-3xl font-headline">Track Your Order</CardTitle>
+          <CardTitle className="text-center text-2xl md:text-3xl font-headline   bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent " >Track Your Order</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -79,7 +79,7 @@ export default function TrackOrderPage() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" disabled={isLoading} className="w-full sm:w-auto">
+              <Button type="submit" disabled={isLoading} className="w-full sm:w-auto bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-full px-6 shadow-md hover:shadow-lg transition-all hover:scale-105">
                 {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
                 <span className="ml-2">Track</span>
               </Button>

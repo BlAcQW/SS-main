@@ -113,7 +113,7 @@ export default async function Home({
           </div>
           
           {/* Trust Badges */}
-          <div className="flex flex-wrap justify-center gap-4 sm:gap-8 mt-8 sm:mt-10 md:mt-12 pt-6 sm:pt-8 border-t border-white/10">
+          {/* <div className="flex flex-wrap justify-center gap-4 sm:gap-8 mt-8 sm:mt-10 md:mt-12 pt-6 sm:pt-8 border-t border-white/10">
             <div className="flex items-center gap-2 text-white/70">
               <Shield className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="text-xs sm:text-sm">Secure Payment</span>
@@ -126,7 +126,7 @@ export default async function Home({
               <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="text-xs sm:text-sm">Quality Guaranteed</span>
             </div>
-          </div>
+          </div> */}
         </div>
         
         {/* Bottom Gradient Fade */}
