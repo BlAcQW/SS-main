@@ -75,7 +75,7 @@ export const ProductCard = ({ product, priority = false }: ProductCardProps) => 
   const { addItem } = useCart();
 
   return (
-    <Card className="group flex h-full flex-col overflow-hidden rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-0 bg-white dark:bg-slate-800">
+    <Card className="group flex h-full flex-col overflow-hidden rounded-xl sm:rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 sm:hover:-translate-y-2 border-0 bg-white dark:bg-slate-800">
       <CardHeader className="p-0">
         <Link href={`/product/${product._id}`} className="block relative">
           <div className="aspect-square w-full overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-800">
@@ -84,7 +84,7 @@ export const ProductCard = ({ product, priority = false }: ProductCardProps) => 
               alt={product.name}
               width={400}
               height={400}
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
               data-ai-hint="product image"
               loading={priority ? 'eager' : 'lazy'}
@@ -97,26 +97,27 @@ export const ProductCard = ({ product, priority = false }: ProductCardProps) => 
           </div>
         </Link>
       </CardHeader>
-      <CardContent className="flex-1 p-5">
+      <CardContent className="flex-1 p-3 sm:p-5">
         <Link href={`/product/${product._id}`}>
-          <p className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider mb-2">
+          <p className="text-[10px] sm:text-xs font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider mb-1 sm:mb-2">
             {product.category?.name || 'Uncategorized'}
           </p>
-          <CardTitle className="mb-3 font-bold text-lg leading-tight text-slate-800 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2">
+          <CardTitle className="mb-2 sm:mb-3 font-bold text-sm sm:text-lg leading-tight text-slate-800 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2">
             {product.name}
           </CardTitle>
         </Link>
       </CardContent>
-      <CardFooter className="flex items-center justify-between p-5 pt-0">
-        <p className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+      <CardFooter className="flex items-center justify-between p-3 sm:p-5 pt-0 gap-2">
+        <p className="text-base sm:text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
           {formatCurrency(product.price)}
         </p>
         <Button 
           onClick={() => addItem(product)} 
           size="sm"
-          className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-full px-4 py-2 transition-all hover:scale-105 shadow-md"
+          className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-full px-2 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm transition-all hover:scale-105 shadow-md"
         >
-          <ShoppingCart className="mr-2 h-4 w-4" /> Add
+          <ShoppingCart className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+          <span className="hidden sm:inline">Add</span>
         </Button>
       </CardFooter>
     </Card>
