@@ -32,6 +32,9 @@ const OrderSchema = new Schema<IOrder>({
   paymentReference: {
     type: String,
   },
+  customerReference: {
+    type: String,
+  },
 }, { timestamps: true });
 
 const Order: Model<IOrder> = models.Order || model<IOrder>('Order', OrderSchema);

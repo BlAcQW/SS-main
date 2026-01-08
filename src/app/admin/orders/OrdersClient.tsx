@@ -834,7 +834,8 @@ import {
   User,
   Phone,
   MapPin,
-  CreditCard
+  CreditCard,
+  Tag
 } from "lucide-react";
 import {
   AlertDialog,
@@ -904,7 +905,8 @@ export default function OrdersClient({ initialOrders }: { initialOrders: IOrder[
     order.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     order.customerEmail?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    order.status.toLowerCase().includes(searchTerm.toLowerCase())
+    order.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    order.customerReference?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Pagination calculations
@@ -954,7 +956,7 @@ export default function OrdersClient({ initialOrders }: { initialOrders: IOrder[
   const downloadOrdersAsCSV = () => {
     const headers = [
       "Order ID", "Date", "Customer Name", "Customer Email", "Customer WhatsApp",
-      "Location", "Total Amount", "Payment Method", "Payment Status", "Order Status", "Items"
+      "Location", "Reference", "Total Amount", "Payment Method", "Payment Status", "Order Status", "Items"
     ];
     
     const rows = orders.map(order => {
@@ -969,6 +971,7 @@ export default function OrdersClient({ initialOrders }: { initialOrders: IOrder[
         order.customerEmail,
         order.customerWhatsapp,
         `"${order.customerLocation}"`,
+        `"${order.customerReference || ''}"`,
         order.totalAmount,
         order.paymentMethod,
         order.paymentStatus,
@@ -1093,6 +1096,12 @@ export default function OrdersClient({ initialOrders }: { initialOrders: IOrder[
                     <User className="h-4 w-4 text-gray-400" />
                     <span className="font-medium text-gray-900 text-sm">{order.customerName}</span>
                   </div>
+                  {order.customerReference && (
+                    <div className="flex items-center gap-2">
+                      <Tag className="h-3 w-3 text-indigo-500" />
+                      <span className="text-xs text-indigo-600 font-medium bg-indigo-50 px-2 py-0.5 rounded-full">{order.customerReference}</span>
+                    </div>
+                  )}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1 text-xs text-gray-500">
                       <ShoppingBag className="h-3 w-3" />
@@ -1214,6 +1223,15 @@ export default function OrdersClient({ initialOrders }: { initialOrders: IOrder[
                             <div className="text-xs text-gray-600">{order.customerEmail}</div>
                           </div>
                         )}
+                        {order.customerReference && (
+                          <div className="flex items-center gap-2">
+                            <Tag className="h-4 w-4 text-indigo-500" />
+                            <div className="flex-1">
+                              <div className="text-xs font-medium text-gray-900">Reference</div>
+                              <div className="text-xs text-indigo-600 font-medium">{order.customerReference}</div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -1275,6 +1293,12 @@ export default function OrdersClient({ initialOrders }: { initialOrders: IOrder[
                           <ShoppingBag className="h-3 w-3" />
                           {order.items.length} item{order.items.length !== 1 ? 's' : ''}
                         </div>
+                        {order.customerReference && (
+                          <div className="flex items-center gap-1">
+                            <Tag className="h-3 w-3 text-indigo-500" />
+                            <span className="text-xs text-indigo-600 font-medium bg-indigo-50 px-1.5 py-0.5 rounded-full truncate max-w-[100px]" title={order.customerReference}>{order.customerReference}</span>
+                          </div>
+                        )}
                       </div>
                     </TableCell>
                     <TableCell>
@@ -1430,6 +1454,15 @@ export default function OrdersClient({ initialOrders }: { initialOrders: IOrder[
                                   <Phone className="h-4 w-4 text-gray-400" />
                                   <div className="text-xs lg:text-sm text-gray-600">{order.customerWhatsapp}</div>
                                 </div>
+                                {order.customerReference && (
+                                  <div className="flex items-start gap-3">
+                                    <Tag className="h-4 w-4 text-indigo-500 mt-0.5 flex-shrink-0" />
+                                    <div className="flex-1">
+                                      <div className="text-xs lg:text-sm font-medium text-gray-900">Reference</div>
+                                      <div className="text-xs lg:text-sm text-indigo-600 font-medium mt-1">{order.customerReference}</div>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>

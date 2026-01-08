@@ -445,6 +445,7 @@ const checkoutSchema = z.object({
   customerEmail: z.string().email({ message: 'Please enter a valid email address.' }),
   customerLocation: z.string().min(5, { message: 'Location must be at least 5 characters.' }),
   customerWhatsapp: z.string().min(10, { message: 'Please enter a valid WhatsApp number.' }),
+  customerReference: z.string().optional(),
   paymentMethod: z.enum(['whatsapp', 'paystack'], {
     required_error: 'You need to select a payment method.',
   }),
@@ -469,6 +470,7 @@ export default function CheckoutPage() {
       customerEmail: '',
       customerLocation: '',
       customerWhatsapp: '',
+      customerReference: '',
       paymentMethod: 'whatsapp',
     },
   });
@@ -813,6 +815,7 @@ ${items.map(item => `- ${item.name} (x${item.quantity}) - ${formatCurrency(item.
                       <FormField control={form.control} name="customerEmail" render={({ field }) => (<FormItem><FormLabel>Email Address</FormLabel><FormControl><Input type="email" placeholder="you@example.com" className="rounded-xl border-2 focus:border-indigo-500" {...field} /></FormControl><FormMessage /></FormItem>)} />
                       <FormField control={form.control} name="customerLocation" render={({ field }) => (<FormItem><FormLabel>Delivery Address</FormLabel><FormControl><Input placeholder="123 Main St, Anytown" className="rounded-xl border-2 focus:border-indigo-500" {...field} /></FormControl><FormMessage /></FormItem>)} />
                       <FormField control={form.control} name="customerWhatsapp" render={({ field }) => (<FormItem><FormLabel>WhatsApp Number</FormLabel><FormControl><Input placeholder="+233..." className="rounded-xl border-2 focus:border-indigo-500" {...field} /></FormControl><FormMessage /></FormItem>)} />
+                      <FormField control={form.control} name="customerReference" render={({ field }) => (<FormItem><FormLabel>Reference <span className="text-muted-foreground text-xs font-normal">(Optional)</span></FormLabel><FormControl><Input placeholder="e.g., PO number, project code, or custom reference" className="rounded-xl border-2 focus:border-indigo-500" {...field} /></FormControl><FormMessage /></FormItem>)} />
 
                       <FormField
                         control={form.control}

@@ -413,7 +413,7 @@ export async function getTrackOrder(id: string): Promise<IOrder | null> {
   // Main order creation function
 export async function createOrder(values: any): Promise<IOrder> {
   await dbConnect();
-  const { customerName, customerEmail, customerLocation, customerWhatsapp, items, totalPrice, paymentMethod } = values;
+  const { customerName, customerEmail, customerLocation, customerWhatsapp, customerReference, items, totalPrice, paymentMethod } = values;
 
   // Basic validation
   if (!customerName || !customerEmail || !customerLocation || !customerWhatsapp || !items || !totalPrice || !paymentMethod) {
@@ -441,6 +441,7 @@ export async function createOrder(values: any): Promise<IOrder> {
     customerEmail,
     customerLocation,
     customerWhatsapp,
+    customerReference: customerReference || undefined,
     items: orderItems,
     totalAmount: totalPrice,
     paymentMethod,

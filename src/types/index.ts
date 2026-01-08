@@ -43,6 +43,7 @@ export interface IOrder {
   paymentStatus: 'pending' | 'paid' | 'failed';
   paymentMethod: 'whatsapp' | 'paystack';
   paymentReference?: string;
+  customerReference?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
