@@ -11,29 +11,42 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 
 export function ProductDetailClient({ product }: { product: IProduct }) {
-  const [primaryImage, setPrimaryImage] = useState(product.imageUrls[0]);
+  // Safe access to imageUrls with fallback
+  const imageUrls = product?.imageUrls || [];
+  const [primaryImage, setPrimaryImage] = useState(imageUrls[0] || '');
+
+  // Handle case where product might be incomplete
+  if (!product) {
+    return <ProductDetailSkeleton />;
+  }
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-start">
         <div className="w-full">
-          <div className="relative aspect-square w-full overflow-hidden rounded-lg shadow-lg mb-4">
-            <Image
-              src={primaryImage}
-              alt={product.name}
-              fill
-              className="h-full w-full object-cover transition-all duration-300"
-              data-ai-hint="product image"
-              key={primaryImage}
-              sizes="(max-width: 768px) 100vw, 50vw"
-              priority // Main product image should load immediately
-              placeholder="blur"
-              blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjFmNWY5Ii8+PC9zdmc+"
-            />
+          <div className="relative aspect-square w-full overflow-hidden rounded-lg shadow-lg mb-4 bg-slate-100 dark:bg-slate-800">
+            {primaryImage ? (
+              <Image
+                src={primaryImage}
+                alt={product.name || 'Product image'}
+                fill
+                className="h-full w-full object-cover transition-all duration-300"
+                data-ai-hint="product image"
+                key={primaryImage}
+                sizes="(max-width: 768px) 100vw, 50vw"
+                priority
+                placeholder="blur"
+                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjFmNWY5Ii8+PC9zdmc+"
+              />
+            ) : (
+              <div className="flex items-center justify-center h-full text-slate-400">
+                No image available
+              </div>
+            )}
           </div>
-          {product.imageUrls && product.imageUrls.length > 1 && (
+          {imageUrls.length > 1 && (
             <div className="grid grid-cols-5 gap-2">
-              {product.imageUrls.map((url, index) => (
+              {imageUrls.map((url, index) => (
                  <div
                   key={index}
                   className={cn(
@@ -44,7 +57,7 @@ export function ProductDetailClient({ product }: { product: IProduct }) {
                 >
                   <Image
                     src={url}
-                    alt={`${product.name} thumbnail ${index + 1}`}
+                    alt={`${product.name || 'Product'} thumbnail ${index + 1}`}
                     fill
                     className="object-cover"
                     data-ai-hint="product thumbnail"
@@ -62,25 +75,27 @@ export function ProductDetailClient({ product }: { product: IProduct }) {
         <div className="flex flex-col h-full">
           <div>
             <p className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider mb-2">
-              {typeof product.category === 'object' && product.category?.name || 'Uncategorized'}
+              {(typeof product.category === 'object' && product.category?.name) || 'Uncategorized'}
             </p>
-            <h1 className="text-3xl md:text-4xl font-headline font-bold mb-4 text-slate-800 dark:text-white">{product.name}</h1>
+            <h1 className="text-3xl md:text-4xl font-headline font-bold mb-4 text-slate-800 dark:text-white">
+              {product.name || 'Unnamed Product'}
+            </h1>
             <p className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6">
-              {formatCurrency(product.price)}
+              {formatCurrency(product.price || 0)}
             </p>
             <p className="text-base text-foreground/80 leading-relaxed mb-6">
-              {product.description}
+              {product.description || 'No description available.'}
             </p>
           </div>
           <div className="mt-auto">
              <div className="flex items-center gap-4 mb-6">
               <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium ${
-                product.stock > 0 
+                (product.stock ?? 0) > 0 
                   ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' 
                   : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
               }`}>
-                <span className={`w-2 h-2 rounded-full ${product.stock > 0 ? 'bg-green-500' : 'bg-red-500'}`} />
-                {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+                <span className={`w-2 h-2 rounded-full ${(product.stock ?? 0) > 0 ? 'bg-green-500' : 'bg-red-500'}`} />
+                {(product.stock ?? 0) > 0 ? `${product.stock} in stock` : 'Out of stock'}
               </span>
             </div>
             <AddToCartButton product={product} />
