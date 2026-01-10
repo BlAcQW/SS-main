@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
-import { notFound } from 'next/navigation';
-import { ProductDetailClient, ProductDetailSkeleton, ProductErrorState } from './ProductDetailClient';
+import { notFound, redirect } from 'next/navigation';
+import { ProductDetailClient, ProductDetailSkeleton } from './ProductDetailClient';
 import dbConnect from '@/lib/mongodb';
 import Product from '@/models/Product';
 import { IProduct } from '@/types';
@@ -71,13 +71,13 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
   const result = await getProduct(id);
   
-  // Only show 404 for genuinely not found or invalid ID
   if (!result.success) {
+    // For not found or invalid ID, show 404
     if (result.error === 'not_found' || result.error === 'invalid_id') {
       notFound();
     }
-    // For connection/unknown errors, show error state instead of 404
-    return <ProductErrorState productId={id} errorType={result.error} />;
+    // For connection/unknown errors, redirect to homepage
+    redirect('/');
   }
 
   return (
