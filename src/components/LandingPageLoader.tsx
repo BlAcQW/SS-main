@@ -2,6 +2,9 @@
 
 import { useEffect, useState, useCallback, ReactNode } from 'react';
 
+// Storage key for tracking first visit
+const LOADER_SHOWN_KEY = 'strichertech_loader_shown';
+
 interface LandingPageLoaderProps {
   children: ReactNode;
   /** Product image URLs to preload */
@@ -12,17 +15,50 @@ interface LandingPageLoaderProps {
   maxWaitTime?: number;
 }
 
+// Check if loader has already been shown in this session
+function hasLoaderBeenShown(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    return sessionStorage.getItem(LOADER_SHOWN_KEY) === 'true';
+  } catch {
+    // sessionStorage might be blocked in some browsers
+    return false;
+  }
+}
+
+// Mark loader as shown
+function markLoaderAsShown(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    sessionStorage.setItem(LOADER_SHOWN_KEY, 'true');
+  } catch {
+    // Ignore storage errors
+  }
+}
+
 export function LandingPageLoader({
   children,
   imageUrls,
   minimumLoadTime = 1000,
   maxWaitTime = 5000,
 }: LandingPageLoaderProps) {
+  // Check immediately if loader was already shown - skip if true
+  const [hasShownBefore, setHasShownBefore] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [loadedImages, setLoadedImages] = useState(0);
 
   const totalImages = imageUrls.length;
+
+  // Check storage on mount (client-side only)
+  useEffect(() => {
+    const shown = hasLoaderBeenShown();
+    setHasShownBefore(shown);
+    if (shown) {
+      // Skip loader entirely if already shown
+      setIsLoading(false);
+    }
+  }, []);
 
   // Preload all product images
   const preloadImages = useCallback(async () => {
@@ -68,12 +104,18 @@ export function LandingPageLoader({
   }, [imageUrls, totalImages]);
 
   useEffect(() => {
+    // Skip loading logic if loader was already shown before
+    if (hasShownBefore === null) return; // Still checking storage
+    if (hasShownBefore) return; // Already shown, skip
+
     let minTimeElapsed = false;
     let dataReady = false;
     let timedOut = false;
 
     const checkComplete = () => {
       if ((minTimeElapsed && dataReady) || timedOut) {
+        // Mark loader as shown before hiding it
+        markLoaderAsShown();
         // Small delay for smooth transition
         setTimeout(() => setIsLoading(false), 100);
       }
@@ -102,7 +144,17 @@ export function LandingPageLoader({
       clearTimeout(minTimer);
       clearTimeout(maxTimer);
     };
-  }, [preloadImages, minimumLoadTime, maxWaitTime]);
+  }, [hasShownBefore, preloadImages, minimumLoadTime, maxWaitTime]);
+
+  // Still checking if loader was shown before - render nothing briefly
+  if (hasShownBefore === null) {
+    return null;
+  }
+
+  // Loader was already shown - render content immediately without animation
+  if (hasShownBefore) {
+    return <>{children}</>;
+  }
 
   if (isLoading) {
     return (
