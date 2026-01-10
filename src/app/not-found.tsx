@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { Home, Search, ArrowLeft } from 'lucide-react';
+import { Home, Search } from 'lucide-react';
+import { GoBackButton } from '@/components/GoBackButton';
 
 export default function NotFound() {
   return (
@@ -7,7 +8,7 @@ export default function NotFound() {
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-indigo-500/5 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/3 right-1/4 w-72 h-72 bg-purple-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '0.5s' }} />
+        <div className="absolute bottom-1/3 right-1/4 w-72 h-72 bg-purple-500/5 rounded-full blur-3xl animate-pulse" />
       </div>
 
       <div className="relative max-w-md w-full text-center">
@@ -42,13 +43,7 @@ export default function NotFound() {
             <Home className="w-5 h-5" />
             Back to Home
           </Link>
-          <button
-            onClick={() => typeof window !== 'undefined' && window.history.back()}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold rounded-full border-2 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all hover:scale-105 active:scale-95"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            Go Back
-          </button>
+          <GoBackButton />
         </div>
 
         {/* Helpful Links */}
