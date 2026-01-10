@@ -316,4 +316,102 @@ button, input, select, textarea {
   .transition-interaction {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
+
+  /* ===== Global Loader Animations ===== */
+  
+  /* Loader bounce animation */
+  @keyframes loader-bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+
+  /* Loader fade in animation */
+  @keyframes loader-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Loader dot animation */
+  @keyframes loader-dot {
+    0%, 100% {
+      opacity: 0.3;
+      transform: scale(0.8);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Loader spin animation */
+  @keyframes loader-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Loader pulse ring */
+  @keyframes loader-pulse-ring {
+    0% {
+      transform: scale(1);
+      opacity: 0.3;
+    }
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+
+  /* Loader animation classes */
+  .animate-loader-bounce {
+    animation: loader-bounce 1.5s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  .animate-loader-fade-in {
+    animation: loader-fade-in 0.5s ease-out forwards;
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+
+  .animate-loader-dot {
+    animation: loader-dot 1.4s ease-in-out infinite;
+    will-change: opacity, transform;
+  }
+
+  .animate-loader-spin {
+    animation: loader-spin 1s linear infinite;
+    will-change: transform;
+  }
+
+  .animate-loader-pulse-ring {
+    animation: loader-pulse-ring 1.5s ease-out infinite;
+    will-change: transform, opacity;
+  }
+
+  /* Reduce motion for loader animations */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-loader-bounce,
+    .animate-loader-fade-in,
+    .animate-loader-dot,
+    .animate-loader-spin,
+    .animate-loader-pulse-ring {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
 }

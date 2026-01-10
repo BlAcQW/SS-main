@@ -1,5 +1,5 @@
-
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
@@ -7,6 +7,8 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import HydrationErrorBoundary from './HydrationErrorBoundary';
 import AuthProvider from '@/components/AuthProvider';
+import { LoadingProvider } from '@/components/LoadingProvider';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 export const metadata: Metadata = {
   title: 'Storely - Your One-Stop Shop',
@@ -27,13 +29,19 @@ export default function RootLayout({
       </head>
       <body className={cn('min-h-screen bg-background font-body antialiased')} suppressHydrationWarning>
         <AuthProvider>
-          <div className="relative flex min-h-screen flex-col">
-            <Header />
-            <HydrationErrorBoundary>
-            <main className="flex-1">{children}</main>
-            </HydrationErrorBoundary>
-            <Footer />
-          </div>
+          <Suspense fallback={null}>
+            <LoadingProvider minimumLoadTime={800}>
+              <ErrorBoundary>
+                <div className="relative flex min-h-screen flex-col">
+                  <Header />
+                  <HydrationErrorBoundary>
+                    <main className="flex-1">{children}</main>
+                  </HydrationErrorBoundary>
+                  <Footer />
+                </div>
+              </ErrorBoundary>
+            </LoadingProvider>
+          </Suspense>
           <Toaster />
         </AuthProvider>
       </body>
