@@ -3,11 +3,13 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import type { IProduct } from '@/types';
 import { formatCurrency } from '@/lib/utils';
 import { AddToCartButton } from '@/components/store/AddToCartButton';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
+import { RefreshCw, Home, AlertTriangle, WifiOff } from 'lucide-react';
 
 
 export function ProductDetailClient({ product }: { product: IProduct }) {
@@ -127,6 +129,72 @@ export function ProductDetailSkeleton() {
           <Skeleton className="h-20 w-full" />
           <Skeleton className="h-12 w-full" />
         </div>
+      </div>
+    </div>
+  );
+}
+
+// Error state component for connection/loading failures
+export function ProductErrorState({ 
+  productId, 
+  errorType 
+}: { 
+  productId: string; 
+  errorType: 'connection_error' | 'unknown_error';
+}) {
+  const isConnectionError = errorType === 'connection_error';
+  
+  return (
+    <div className="min-h-[60vh] flex items-center justify-center p-4">
+      <div className="max-w-md w-full text-center">
+        {/* Error Icon */}
+        <div className="relative mx-auto mb-8">
+          <div className={`absolute inset-0 ${isConnectionError ? 'bg-orange-500/10' : 'bg-red-500/10'} blur-3xl rounded-full`} />
+          <div className={`relative w-20 h-20 mx-auto ${
+            isConnectionError 
+              ? 'bg-gradient-to-br from-orange-50 to-yellow-50 dark:from-orange-950/50 dark:to-yellow-950/50 border-orange-200 dark:border-orange-900' 
+              : 'bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/50 dark:to-orange-950/50 border-red-200 dark:border-red-900'
+          } rounded-full flex items-center justify-center border-2 shadow-xl`}>
+            {isConnectionError ? (
+              <WifiOff className="w-10 h-10 text-orange-500 dark:text-orange-400" />
+            ) : (
+              <AlertTriangle className="w-10 h-10 text-red-500 dark:text-red-400" />
+            )}
+          </div>
+        </div>
+
+        {/* Error Message */}
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white mb-3">
+          {isConnectionError ? 'Connection Issue' : 'Something went wrong'}
+        </h1>
+        <p className="text-slate-600 dark:text-slate-400 mb-8">
+          {isConnectionError 
+            ? 'We\'re having trouble connecting to our servers. This usually resolves quickly.'
+            : 'We encountered an unexpected error while loading this product.'}
+        </p>
+
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <button
+            onClick={() => window.location.reload()}
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+          >
+            <RefreshCw className="w-5 h-5" />
+            Try Again
+          </button>
+          <Link
+            href="/"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold rounded-full border-2 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all hover:scale-105 active:scale-95"
+          >
+            <Home className="w-5 h-5" />
+            Back to Shop
+          </Link>
+        </div>
+
+        {/* Help Text */}
+        <p className="mt-8 text-sm text-slate-500 dark:text-slate-500">
+          If the problem persists, please try again in a few moments.
+        </p>
       </div>
     </div>
   );
