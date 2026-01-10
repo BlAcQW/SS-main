@@ -6,9 +6,10 @@ import dbConnect from '@/lib/mongodb';
 import Category from '@/models/Category';
 import Product from '@/models/Product';
 import { ProductFilters } from '@/components/store/ProductFilters';
-import { Sparkles, ArrowRight, Shield, Truck } from 'lucide-react';
+import { Sparkles, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import CTASection from '@/components/footer2';
+import { LandingPageContent } from '@/components/LandingPageContent';
 
 async function getCategories(): Promise<ICategory[]> {
   await dbConnect();
@@ -58,7 +59,14 @@ export default async function Home({
     return categoryMatch && searchMatch && minPriceMatch && maxPriceMatch && tagMatch;
   });
 
+  // Extract first image URL from each product for preloading
+  const productImageUrls = filteredProducts
+    .slice(0, 12) // Preload first 12 products (visible on most screens)
+    .map(product => product.imageUrls?.[0])
+    .filter((url): url is string => Boolean(url));
+
   return (
+    <LandingPageContent productImageUrls={productImageUrls}>
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
       {/* Enhanced Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-900">
@@ -156,6 +164,7 @@ export default async function Home({
       {/* Footer CTA */}
       <CTASection/>
     </div>
+    </LandingPageContent>
   );
 }
 

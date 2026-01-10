@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { Suspense } from 'react';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
@@ -7,7 +6,6 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import HydrationErrorBoundary from './HydrationErrorBoundary';
 import AuthProvider from '@/components/AuthProvider';
-import { LoadingProvider } from '@/components/LoadingProvider';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 export const metadata: Metadata = {
@@ -29,19 +27,15 @@ export default function RootLayout({
       </head>
       <body className={cn('min-h-screen bg-background font-body antialiased')} suppressHydrationWarning>
         <AuthProvider>
-          <Suspense fallback={null}>
-            <LoadingProvider minimumLoadTime={800}>
-              <ErrorBoundary>
-                <div className="relative flex min-h-screen flex-col">
-                  <Header />
-                  <HydrationErrorBoundary>
-                    <main className="flex-1">{children}</main>
-                  </HydrationErrorBoundary>
-                  <Footer />
-                </div>
-              </ErrorBoundary>
-            </LoadingProvider>
-          </Suspense>
+          <ErrorBoundary>
+            <div className="relative flex min-h-screen flex-col">
+              <Header />
+              <HydrationErrorBoundary>
+                <main className="flex-1">{children}</main>
+              </HydrationErrorBoundary>
+              <Footer />
+            </div>
+          </ErrorBoundary>
           <Toaster />
         </AuthProvider>
       </body>
